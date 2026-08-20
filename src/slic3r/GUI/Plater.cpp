@@ -21413,7 +21413,6 @@ void Plater::send_gcode_legacy(int plate_idx, Export3mfProgressFn proFn, bool us
             return;
         }
         config->set_bool("open_device_tab_post_upload", dlg.switch_to_device_tab());
-        upload_job.switch_to_device_tab    = dlg.switch_to_device_tab();
         upload_job.upload_data.upload_path = dlg.filename();
         upload_job.upload_data.post_action = dlg.post_action();
         upload_job.upload_data.group       = dlg.group();
@@ -21425,9 +21424,13 @@ void Plater::send_gcode_legacy(int plate_idx, Export3mfProgressFn proFn, bool us
         dialog->set_send_page(dlg.post_action() == PrintHostPostUploadAction::None);
         dialog->set_gcode_file_name(upload_job.upload_data.source_path.string());
         dialog->set_display_file_name(upload_job.upload_data.upload_path.string());
-        bool res = dialog->run();
+        dialog->run();
 
-        if (dialog->is_finish()) {
+        // Only jump to the Device tab when the upload finished successfully and the user
+        // did not opt out. need_switch_to_device() carries both the user's choice
+        // (set_swtich_to_device above) and the web page's failure signal
+        // (SSWCP_MachineOption_Instance::sw_FinishPreprint).
+        if (dialog->is_finish() && dialog->need_switch_to_device()) {
             wxGetApp().mainframe->select_tab(MainFrame::TabPosition::tpMonitor);
         }
 

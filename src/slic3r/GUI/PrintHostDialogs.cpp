@@ -64,7 +64,6 @@ void PrintHostSendDialog::init()
     const auto& storage_paths = m_paths;
     const auto& post_actions = m_post_actions;
     const auto& storage_names = m_storage_names;
-    m_switch_to_device_tab = true;
 
     const AppConfig* app_config = wxGetApp().app_config;
 
@@ -114,21 +113,23 @@ void PrintHostSendDialog::init()
     txt_filename->SetValue(recent_path);
 
 
-    /*auto checkbox_sizer = new wxBoxSizer(wxHORIZONTAL);
-    auto checkbox       = new ::CheckBox(this, wxID_APPLY);
-    checkbox->SetValue(m_switch_to_device_tab);
-    checkbox->Bind(wxEVT_TOGGLEBUTTON, [this](wxCommandEvent& e) {
-        m_switch_to_device_tab = e.IsChecked();
-        e.Skip();
-    });
-    checkbox_sizer->Add(checkbox, 0, wxALL | wxALIGN_CENTER, FromDIP(2));
+    {
+        auto checkbox_sizer = new wxBoxSizer(wxHORIZONTAL);
+        auto checkbox       = new ::CheckBox(this, wxID_APPLY);
+        checkbox->SetValue(m_switch_to_device_tab);
+        checkbox->Bind(wxEVT_TOGGLEBUTTON, [this](wxCommandEvent& e) {
+            m_switch_to_device_tab = e.IsChecked();
+            e.Skip();
+        });
+        checkbox_sizer->Add(checkbox, 0, wxALL | wxALIGN_CENTER, FromDIP(2));
 
-    auto checkbox_text = new wxStaticText(this, wxID_ANY, _L("Switch to Device tab after upload."), wxDefaultPosition, wxDefaultSize, 0);
-    checkbox_sizer->Add(checkbox_text, 0, wxALL | wxALIGN_CENTER, FromDIP(2));
-    checkbox_text->SetFont(::Label::Body_13);
-    checkbox_text->SetForegroundColour(StateColor::darkModeColorFor(wxColour("#323A3D")));
-    content_sizer->Add(checkbox_sizer);
-    content_sizer->AddSpacer(VERT_SPACING);*/
+        auto checkbox_text = new wxStaticText(this, wxID_ANY, _L("Switch to Device tab after upload."), wxDefaultPosition, wxDefaultSize, 0);
+        checkbox_sizer->Add(checkbox_text, 0, wxALL | wxALIGN_CENTER, FromDIP(2));
+        checkbox_text->SetFont(::Label::Body_13);
+        checkbox_text->SetForegroundColour(StateColor::darkModeColorFor(wxColour("#323A3D")));
+        content_sizer->Add(checkbox_sizer);
+        content_sizer->AddSpacer(VERT_SPACING);
+    }
     
     if (size_t extension_start = recent_path.find_last_of('.'); extension_start != std::string::npos)
         m_valid_suffix = recent_path.substr(extension_start);

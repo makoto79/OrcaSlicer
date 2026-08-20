@@ -132,6 +132,11 @@ void AppConfig::set_defaults()
         if (get("drop_project_action").empty())
             set_bool("drop_project_action", true);
 
+        // Jump to the Device tab after a successful upload. Opt-out via Preferences
+        // or the checkbox in the send dialog.
+        if (get("open_device_tab_post_upload").empty())
+            set_bool("open_device_tab_post_upload", true);
+
 #ifdef _WIN32
         if (get("associate_3mf").empty())
             set_bool("associate_3mf", false);
